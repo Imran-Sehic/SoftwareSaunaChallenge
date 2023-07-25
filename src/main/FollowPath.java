@@ -135,10 +135,9 @@ public class FollowPath {
         if(direction == FROM_LEFT || direction == FROM_RIGHT) {
             char aboveStep = getHorizontalOrVerticalStep(FROM_BELOW, currentPosition);
             char belowStep = getHorizontalOrVerticalStep(FROM_ABOVE, currentPosition);
-            if((aboveStep != ' ' && aboveStep != '-') && (belowStep != ' ' && belowStep != '-')) {
-                throw new Error("Invalid input, fork in the path!");
-            }
+
             if(aboveStep != ' ' && aboveStep != '-') {
+                if(belowStep != ' ' && belowStep != '-') throw new Error("Invalid input, fork in the path!");
                 makeStep(new int[]{rowIndex - 1, columnIndex}, letters, path, letterIndexes, currentPosition);
             }
             if(belowStep != ' ' && belowStep != '-') {
@@ -153,10 +152,8 @@ public class FollowPath {
             char leftStep = getHorizontalOrVerticalStep(FROM_RIGHT, currentPosition);
             char rightStep = getHorizontalOrVerticalStep(FROM_LEFT, currentPosition);
 
-            if((leftStep != ' ' && leftStep != '|') && (rightStep != ' ' && rightStep != '|')) {
-                throw new Error("Invalid input, fork in the path!");
-            }
             if(leftStep != ' ' && leftStep != '|') {
+                if(rightStep != ' ' && rightStep != '|') throw new Error("Invalid input, fork in the path!");
                 makeStep(new int[]{rowIndex, columnIndex - 1}, letters, path, letterIndexes, currentPosition);
             }
             if(rightStep != ' ' && rightStep != '|') {
@@ -184,7 +181,10 @@ public class FollowPath {
         if(direction == FROM_LEFT || direction == FROM_RIGHT) {
             char belowStep = getHorizontalOrVerticalStep(FROM_ABOVE, currentPosition);
             char aboveStep = getHorizontalOrVerticalStep(FROM_BELOW, currentPosition);
-            if((belowStep == ' ' || belowStep == '-') && (aboveStep == ' ' || aboveStep == '-') && nextStep == '|') {
+            boolean isBelowValid = belowStep != ' ' && belowStep != '-';
+            boolean isAboveValid = aboveStep != ' ' && aboveStep != '-';
+
+            if(!isBelowValid && !isAboveValid && nextStep == '|') {
                 throw new Error("Invalid input, broken path!");
             }
             if(nextStep != ' ' && nextStep != '|') {
@@ -192,11 +192,11 @@ public class FollowPath {
             }
             // If not able to go straight go either up or down
             else {
-                if(belowStep != ' ' && belowStep != '-' && aboveStep != ' ' && aboveStep != '-') {
+                if(isBelowValid && isAboveValid) {
                     throw new Error("Invalid input, fork in the path");
                 }
-                if((belowStep != ' ' && belowStep != '-') || (aboveStep != ' ' && aboveStep != '-')) {
-                    int upOrDown = belowStep != ' ' && belowStep != '-' ? rowIndex + 1 : rowIndex - 1;
+                if(isBelowValid || isAboveValid) {
+                    int upOrDown = isBelowValid ? rowIndex + 1 : rowIndex - 1;
                     makeStep(new int[]{upOrDown, columnIndex}, letters, path, letterIndexes, currentPosition);
                 }
             }
@@ -205,7 +205,10 @@ public class FollowPath {
         else {
             char rightStep = getHorizontalOrVerticalStep(FROM_LEFT, currentPosition);
             char leftStep = getHorizontalOrVerticalStep(FROM_RIGHT, currentPosition);
-            if((rightStep == ' ' || rightStep == '|') && (leftStep == ' ' || leftStep == '|') && nextStep == '-') {
+            boolean isRightValid = rightStep != ' ' && rightStep != '|';
+            boolean isLeftValid = leftStep != ' ' && leftStep != '|';
+
+            if(!isRightValid && !isLeftValid && nextStep == '-') {
                 throw new Error("Invalid input, broken path!");
             }
             if(nextStep != ' ' && nextStep != '-') {
@@ -213,11 +216,11 @@ public class FollowPath {
             }
             // If not able to go straight go either right or left
             else {
-                if(rightStep != ' ' && rightStep != '|' && leftStep != ' ' && leftStep != '|') {
+                if(isRightValid && isLeftValid) {
                     throw new Error("Invalid input, fork in the path!");
                 }
-                if((rightStep != ' ' && rightStep != '|') || (leftStep != ' ' && leftStep != '|')) {
-                    int rightOrLeft = rightStep != ' ' && rightStep != '|' ? columnIndex + 1 : columnIndex - 1;
+                if(isRightValid || isLeftValid) {
+                    int rightOrLeft = isRightValid ? columnIndex + 1 : columnIndex - 1;
                     makeStep(new int[]{rowIndex, rightOrLeft}, letters, path, letterIndexes, currentPosition);
                 }
             }
@@ -239,9 +242,9 @@ public class FollowPath {
             char wayChar = ways.values().iterator().next();
             int direction = getDirection(wayPosition, startPosition);
 
-            //                                          -
+            //                                           -
             // Checking for these scenarios: |@ or @| or @ or @
-            //                                               -
+            //                                                -
             if((direction == FROM_LEFT || direction == FROM_RIGHT) && wayChar == '|'
                     || (direction == FROM_ABOVE || direction == FROM_BELOW) && wayChar == '-') {
                 throw new Error("Invalid input, broken path!");
