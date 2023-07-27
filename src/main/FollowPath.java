@@ -107,7 +107,7 @@ public class FollowPath {
         }
     }
 
-    public void handleHorizontalOrVerticalStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
+    private void handleHorizontalOrVerticalStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
         int rowIndex = currentPosition[0];
         int columnIndex = currentPosition[1];
         char nextStep = getHorizontalOrVerticalStep(direction, currentPosition);
@@ -127,7 +127,7 @@ public class FollowPath {
         }
     }
 
-    public void handleCrossingStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
+    private void handleCrossingStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
         int rowIndex = currentPosition[0];
         int columnIndex = currentPosition[1];
 
@@ -165,7 +165,7 @@ public class FollowPath {
         }
     }
 
-    public void handleLetterStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
+    private void handleLetterStep(int direction, int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
         int rowIndex = currentPosition[0];
         int columnIndex = currentPosition[1];
 
@@ -228,7 +228,7 @@ public class FollowPath {
     }
 
     // Making this method to call the starting position only once, to avoid passing non-existing previous position as parameter
-    public void makeStep(int[] startPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
+    private void makeStep(int[] startPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes) {
         int rowIndex = startPosition[0];
         int columnIndex = startPosition[1];
 
@@ -260,7 +260,7 @@ public class FollowPath {
     }
 
     // Making this method as override to previous one with addition of previousPosition parameter
-    public void makeStep(int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes, int[] previousPosition) {
+    private void makeStep(int[] currentPosition, List<Character> letters, List<Character> path, List<int[]> letterIndexes, int[] previousPosition) {
         int rowIndex = currentPosition[0];
         int columnIndex = currentPosition[1];
 
